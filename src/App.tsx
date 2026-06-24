@@ -188,7 +188,10 @@ const App: React.FC = () => {
                     end: '+=100%', // Exactly 1 full screen scroll transition
                     scrub: 1.2,
                     pin: true,
-                    anticipatePin: 1
+                    anticipatePin: 1,
+                    onScrubComplete: () => {
+                        window.dispatchEvent(new Event('resize'));
+                    }
                 }
             });
 
@@ -323,6 +326,7 @@ const App: React.FC = () => {
 
         const timer = setTimeout(() => {
             ScrollTrigger.refresh();
+            window.dispatchEvent(new Event('resize'));
         }, 800);
 
         return () => {
