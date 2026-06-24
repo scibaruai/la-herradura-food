@@ -52,11 +52,11 @@ const BurgerModel: React.FC<BurgerModelProps> = ({ scrollFraction, mouse }) => {
     }), []);
 
     const hsMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
-        color: 0xFFD700, // Shiny gold/yellow horseshoe
-        metalness: 0.9,
-        roughness: 0.15,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.05
+        color: 0x484B50, // Realistic dark forged steel/iron
+        metalness: 0.85,
+        roughness: 0.45,
+        clearcoat: 0.2,
+        clearcoatRoughness: 0.3
     }), []);
 
     // 2. Tomato Slice Canvas Texture
@@ -155,15 +155,16 @@ const BurgerModel: React.FC<BurgerModelProps> = ({ scrollFraction, mouse }) => {
         return geo;
     }, []);
 
-    // 5. Golden Horseshoe 3D Extruded Geometry
+    // 5. Forged Iron Horseshoe 3D Extruded Geometry
     const hsGeometry = useMemo(() => {
         const hsShape = new THREE.Shape();
-        const outerRadius = 2.4;
-        const innerRadius = 1.9;
+        const outerRadius = 2.3;
+        const innerRadius = 1.7;
         const hsPoints = 40;
-        const startAngle = 1.35 * Math.PI;
-        const endAngle = 0.65 * Math.PI;
+        const startAngle = 1.32 * Math.PI;
+        const endAngle = 0.68 * Math.PI;
         
+        // Draw outer curved boundary
         for (let i = 0; i <= hsPoints; i++) {
             const t = i / hsPoints;
             const angle = startAngle + t * (2 * Math.PI - (startAngle - endAngle));
@@ -176,8 +177,10 @@ const BurgerModel: React.FC<BurgerModelProps> = ({ scrollFraction, mouse }) => {
             }
         }
         
+        // Flat rounded heel tip
         hsShape.lineTo(Math.cos(endAngle) * innerRadius, Math.sin(endAngle) * innerRadius);
         
+        // Draw inner curved boundary back
         for (let i = hsPoints; i >= 0; i--) {
             const t = i / hsPoints;
             const angle = startAngle + t * (2 * Math.PI - (startAngle - endAngle));
@@ -186,12 +189,32 @@ const BurgerModel: React.FC<BurgerModelProps> = ({ scrollFraction, mouse }) => {
         
         hsShape.closePath();
 
+        // Add 6 square nail holes along the horseshoe arc (leaving front solid)
+        const holeSize = 0.07;
+        const r_mid = (outerRadius + innerRadius) / 2;
+        const holePositions = [0.12, 0.25, 0.38, 0.62, 0.75, 0.88];
+        
+        holePositions.forEach((t) => {
+            const angle = startAngle + t * (2 * Math.PI - (startAngle - endAngle));
+            const hx = Math.cos(angle) * r_mid;
+            const hy = Math.sin(angle) * r_mid;
+            
+            const holePath = new THREE.Path();
+            holePath.moveTo(hx - holeSize, hy - holeSize);
+            holePath.lineTo(hx + holeSize, hy - holeSize);
+            holePath.lineTo(hx + holeSize, hy + holeSize);
+            holePath.lineTo(hx - holeSize, hy + holeSize);
+            holePath.closePath();
+            
+            hsShape.holes.push(holePath);
+        });
+
         const extrudeSettings = {
-            depth: 0.25,
+            depth: 0.22,
             bevelEnabled: true,
-            bevelSegments: 4,
+            bevelSegments: 5,
             steps: 1,
-            bevelSize: 0.04,
+            bevelSize: 0.035,
             bevelThickness: 0.04
         };
 
@@ -310,7 +333,7 @@ const BurgerModel: React.FC<BurgerModelProps> = ({ scrollFraction, mouse }) => {
     });
 
     return (
-        <group ref={groupRef} scale={[0.9, 0.9, 0.9]}>
+        <group ref={groupRef} scale={[1.3, 1.3, 1.3]}>
             {/* Top Bun with Scattered Seeds and Flat Crumb Base */}
             <group ref={topBunRef} scale={[1.0, 0.65, 1.0]}>
                 {/* Golden Dome Crust */}

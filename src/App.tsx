@@ -91,10 +91,7 @@ const App: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Force R3F Canvas container to remeasure bounds during scroll-driven 3D transforms
-    useEffect(() => {
-        window.dispatchEvent(new Event('resize'));
-    }, [scrollFraction]);
+
 
     // Mouse coordinates tracker
     useEffect(() => {
@@ -185,9 +182,6 @@ const App: React.FC = () => {
 
             // Master Pinned Scroll Timeline for Hero to Historia transition
             const tl = gsap.timeline({
-                onUpdate: () => {
-                    window.dispatchEvent(new Event('resize'));
-                },
                 scrollTrigger: {
                     trigger: '.panels-container',
                     start: 'top top',
