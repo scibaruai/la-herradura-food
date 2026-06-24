@@ -2,6 +2,8 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
+
+
 interface BurgerModelProps {
     scrollFraction: number;
     mouse: { x: number; y: number };
@@ -401,7 +403,7 @@ interface BurgerSceneProps {
 
 const BurgerScene: React.FC<BurgerSceneProps> = ({ scrollFraction, mouse }) => {
     return (
-        <div style={{ width: '100%', height: '100%', outline: 'none' }}>
+        <div style={{ width: '100%', height: '100%', outline: 'none', position: 'relative' }}>
             <Canvas
                 shadows
                 camera={{ position: [0, 0.6, 8.5], fov: 45 }}
