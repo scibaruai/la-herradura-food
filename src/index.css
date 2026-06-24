@@ -1142,7 +1142,9 @@ button {
     }
     
     .hero-features {
-        justify-content: center;
+        flex-wrap: wrap !important;
+        gap: 1.5rem !important;
+        justify-content: center !important;
     }
     
     .promos-grid, .menu-grid {
